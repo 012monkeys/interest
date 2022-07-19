@@ -8,17 +8,18 @@
   </head>
   <body></body>
   <script>
-    const o = {_name: 'xiaoli'}
-    Object.defineProperty(o, 'name', {
-      get(){
-        return this._name
-      },
-      set(val) {
-        if(val !== this._name) {
-          this._name = val
+    const arr = [1, 2, 3, [4, 5, [7, 8]]]
+    const newArr = []
+    function fn(arr) {
+      for (let val of arr) {
+        if (Array.isArray(val)) {
+          fn(val)
+        } else {
+          newArr.push(val)
         }
-        return this._name
       }
-    })
+    }
+    fn(arr)
+    console.log(newArr)
   </script>
 </html>

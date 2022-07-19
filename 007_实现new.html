@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 实现new 运算符
+    // 创建新对象
+    // 把this指向新对象
+    // 执行函数
+    // 返回新对象
+
+    function _new(fn, ...args) {
+      const obj = {}
+      obj.__proto__ = fn.prototype
+      fn.call(obj, ...args)
+      return obj
+    }
+
+    function fn1(name, age) {
+      this.name = name
+      this.age = age
+    }
+    fn1.prototype.getName = function () {
+      console.log(this.name)
+    }
+    const p = _new(fn1, 'xiaoli', 18)
+  </script>
+</html>
