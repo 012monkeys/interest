@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 包含promise数组,循序执行
+    let p1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p1')
+      }, 1000)
+    })
+    let p2 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p2')
+      }, 2000)
+    })
+
+    let p3 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p3')
+      }, 3000)
+    })
+
+    // 失败的情况
+    let p4 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error('p4失败'))
+      }, 1000)
+    })
+    p4.then(()=> {
+      console.log('then');
+    }).catch((data)=>{
+      console.log(data);
+    })
+
+    let pArr = [p1, p2, p3]
+    // all和race方法
+    Promise.all(pArr).then((data) => {
+      console.log('all', data)
+    })
+
+    Promise.race(pArr).then((data) => {
+      console.log('race',data)
+    })
+  </script>
+</html>

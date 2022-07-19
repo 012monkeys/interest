@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <button>btn1</button>
+    <button>btn2</button>
+    <button>btn3</button>
+  </div>
+  <script>
+    // 事件代理 把多个事件监听减少为一个
+    // 需求: 知道点击的是那个按钮
+    let box =  document.getElementsByClassName('container')[0]
+    box.addEventListener('click', function(e) {
+      console.log("🚀 ~ box.addEventListener ~ e.target", e.target.innerHTML)
+    }, true)
+    
+  </script>
+</body>
+</html>

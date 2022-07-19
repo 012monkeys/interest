@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function clone(target) {
+      let cloneTarget = {}
+      for (const key in target) {
+        cloneTarget[key] = target[key]
+      }
+      return cloneTarget
+    }
+
+    const target = {
+      field1: 1,
+      field2: undefined,
+      field3: 'ConardLi',
+      field4: {
+        child: 'child',
+        child2: {
+          child2: 'child2'
+        }
+      }
+    }
+
+    // 第一版 不考虑数组的情况
+    function clone02(target) {
+      if (typeof target === 'object') {
+        let cloneTarget = {}
+        for (const key in target) {
+          cloneTarget[key] = clone02(target[key])
+        }
+        return cloneTarget
+      } else {
+        return target
+      }
+    }
+    
+    const a2 = clone02(target)
+    console.log('🚀 ~ a', a2)
+    // 考虑数组
+    const targetArr = {
+      field1: 1,
+      field2: undefined,
+      field3: {
+        child: 'child'
+      },
+      field4: [2, 4, 8]
+    }
+    function clone03(target) {
+      if (typeof target === 'object' && target!== null) {
+        let cloneTarget = Array.isArray(target) ? [] : {}
+        for (const key in target) {
+          cloneTarget[key] = clone03(target[key])
+        }
+        return cloneTarget
+      } else {
+        return target
+      }
+    }
+
+   let a3 = clone03(targetArr)
+   console.log("🚀 ~ a3", a3)
+  </script>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    包含promise数组,循序执行
+  </body>
+  <script>
+    // 包含promise数组,循序执行
+    let p1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p1')
+      }, 1000)
+    })
+    let p2 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p2')
+      }, 2000)
+    })
+
+    let p3 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p3')
+      }, 3000)
+    })
+
+    // 用迭代器, 按顺序执行promise的数组
+    let pArr = [p1, p2, p3]
+    function orderP(arr) {
+      let p = arr.shift()
+      if (p) {
+        p.then((data) => {
+          console.log(data)
+          orderP(arr)
+        })
+      }
+    }
+    orderP(pArr)
+  </script>
+</html>
