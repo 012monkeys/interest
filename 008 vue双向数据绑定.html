@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="user"></div>
+    <div id="age"></div>
+  </body>
+  <script>
+    const vueData = {
+      name: 'xiaoli',
+      age: 18
+    }
+
+    class Dep {
+      constructor() {
+        this.subs = []
+      }
+      addSub(watcher) {
+        this.subs.push(watcher)
+      }
+      notify() {
+        if (this.subs.length > 0) {
+          this.subs.forEach((watcher) => watcher.update())
+        }
+      }
+    }
+    class Watcher {
+      constructor(obj, key, cb) {
+        this.obj = obj
+        this.key = key
+        this.cb = cb
+
+        Dep.target = this //?
+        obj[key] // 触发收集订阅者
+        Dep.target = null //?
+      }
+      update() {
+        const val = this.obj[this.key]
+        this.cb(val)
+      }
+    }
+    // 数据劫持
+    const dep = new Dep()
+    Object.keys(vueData).forEach((key) => {
+      let value = vueData[key]
+      Object.defineProperty(vueData, key, {
+        get() {
+          Dep.target && dep.addSub(Dep.target) // Watcher的实例, 放入订阅器中
+          return value
+        },
+        set(newValue) {
+          value = newValue
+          dep.notify()  //数据改变时, 通知所有订阅者
+        }
+      })
+    })
+
+    function initWatcher() {
+      Object.keys(vueData).forEach(key => {
+        let val = vueData[key]
+        renden(key, val) //更新dom
+
+        new Watcher(vueData, key, (val) => {
+          console.log('通知watcher', val)
+          renden(key, val) // 渲染更新dom
+        })
+      })
+    }
+    // dom渲染函数
+    function renden(key, value) {
+      const user = document.getElementById('user')
+      const age = document.getElementById('age')
+      if (key === 'name') {
+        user.innerHTML = value
+      }
+      if (key === 'age') {
+        age.innerHTML = value
+      }
+    }
+
+    initWatcher() // 初始化
+  </script>
+</html>
