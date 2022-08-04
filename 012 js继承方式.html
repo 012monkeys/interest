@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // ES6
+    class Parent01 {
+      constructor(name, age) {
+        this.name = name
+        this.age = age
+      }
+      getUserName() {
+        console.log(this.name)
+      }
+    }
+    class Child01 extends Parent01 {
+      constructor(name, age, vip) {
+        super(name, age)
+        this.vip = vip
+      }
+    }
+    const child01 = new Child01('xiaoli', 18, 5)
+    child01.getUserName()
+
+    // 原型
+    function Parent02() {
+      this.name = 'public'
+    }
+    Parent02.prototype.getUserName = function () {
+      console.log(this.name)
+    }
+    function Child02(name, age, vip) {
+      this.vip = vip
+    }
+    Child02.prototype = new Parent02()
+
+    const child02 = new Child02(5)
+    child02.getUserName()
+    // 好处: 父类的方法为子类共同拥有
+    // 不足: 无法向父类传参, 父类的属性会在子类的property执行一遍.
+
+    // 借助构造函数继承
+    function Parent03(name, age) {
+      this.name = name
+      this.age = age
+    }
+    // Parent02.prototype.getUserName = function () {
+    //   console.log(this.name)
+    // }
+    function Child03(name, age, vip) {
+      Parent03.call(this, name, age)
+      this.vip = vip
+      this.getUserName = function () {
+        console.log(this.name)
+      }
+    }
+    const child03 = new Child03('child3', 18, 'level')
+    child03.getUserName()
+    // 优点: 可以向父类传参
+    // 缺点: 无法访问父类的原型上定义的方法.
+
+    // 组合的方式
+    function Parent04(name, age) {
+      this.name = name
+      this.age = age
+    }
+    Parent04.prototype.getUserName = function () {
+      console.log(this.name)
+    }
+    function Child04(name, age, vip) {
+      Parent03.call(this, name, age)
+      this.vip = vip
+    }
+    Child04.prototype = new Parent04()
+    Child04.prototype.constructor = Child04
+    const child04 = new Child04('child4', 18, 'level')
+    child04.getUserName()
+
+
+    // 会调用两次父类的构造函数, 一次在子类的构成函数中,一次在子类的原型中.
+
+
+
+    // 组合寄生继承
+    function Parent05(name, age) {
+      this.name = name
+      this.age = age
+    }
+    Parent05.prototype.getUserName = function () {
+      console.log(this.name)
+    }
+    function Child05(name, age, vip) {
+      Parent03.call(this, name, age)
+      this.vip = vip
+    }
+    Child05.prototype = Object.create(Parent05.prototype)
+    Child05.prototype.constructor = Child05
+    const child05 = new Child05('child5', 18, 'level')
+    child05.getUserName()
+
+    // 组合寄生主要利用一个空对象来完成父类的原型对象添加到子类里面去.
+  </script>
+</html>
