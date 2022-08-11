@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // vue2 响应式原理
+    // #region
+    const user = {
+      name: 'smile',
+      age: 18
+    }
+    const p = {}
+    Object.defineProperty(p, 'name', {
+      get() {
+        return user.name
+      },
+      set(value) {
+        user.name = value
+      }
+    })
+    // #endregion
+
+    // vue3 响应式原理
+    let person = {
+      name: 'xiao',
+      age: 20
+    }
+    const p1 = new Proxy(person, {
+      get(target, propsName) {
+        // return target[propsName]
+        return Reflect.get(target,propsName)
+      },
+      set(target, propsName, value) {
+        // 修改和添加时, 会触发
+        console.log('set inset')
+        // target[propsName] = value
+        Reflect.set(target,propsName,value)
+      },
+      deleteProperty(target, propsName) {
+        // return delete target[propsName]
+        return Reflect.deleteProperty(target, propsName)
+      }
+    })
+    console.log("🚀 ~ p", p1)
+  </script>
+</html>
